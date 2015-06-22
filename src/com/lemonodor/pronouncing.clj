@@ -5,8 +5,21 @@
             [clojure.string :as string])
   (:gen-class))
 
+
 (defn parse-cmudict-line [line]
-  (string/split (string/lower-case line) #"(\(\d+\))? +"))
+  (let [[word phones] (string/split line #"(\(\d+\))?  ")]
+    [(string/lower-case word) phones]))
+
+
+(defn is-cmudict-comment-line? [line]
+  (= (get line 0) \;))
+
+
+(defn parse-cmudict [rdr]
+  (->> rdr
+       line-seq
+       (filter #(not (is-cmudict-comment-line? %)))
+       (map parse-cmudict-line)))
 
 
 (def digit-chars #{\0 \1 \2 \3 \4 \5 \6 \7 \8 \9})
@@ -33,16 +46,25 @@
                 (line-seq rdr)))))))
 
 
-(def default-syllables-db
+(def default-pronouncing-db
   (memoize
    (fn []
-     (edn/read-string
-      (slurp (io/resource "com/lemonodor/syllables/syllables.db"))))))
+     (with-open [rdr (io/reader (io/resource "com/lemonodor/pronouncing/cmudict-0.7b"))]
+       (reduce
+        (fn [db [word phones]]
+          (assoc db word
+                 (concat (get db word []) (vector phones))))
+        {}
+        (parse-cmudict rdr))))))
+
+
+(defn phones-for-word [word]
+  ((default-pronouncing-db) (string/lower-case word)))
 
 
 (defn count-syllables
   ([word]
-   (count-syllables (default-syllables-db) word))
+   (count-syllables (default-pronouncing-db) word))
   ([sdb word]
    (sdb (string/lower-case word))))
 
