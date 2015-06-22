@@ -1,6 +1,6 @@
-(defproject com.lemonodor/syllables "0.1.2-SNAPSHOT"
-  :description "Clojure library for counting syllables in words."
-  :url "https://github.com/wiseman/clj-syllables"
+(defproject com.lemonodor/pronouncing "0.0.1-SNAPSHOT"
+  :description "Clojure interface to the CMU pronouncing dictionary."
+  :url "https://github.com/wiseman/clj-pronouncing"
   :license {:name "MIT License"
             :url "http://opensource.org/licenses/MIT"}
   :deploy-repositories [["releases" :clojars]]
