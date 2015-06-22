@@ -5,7 +5,6 @@
             [clojure.string :as string])
   (:gen-class))
 
-
 (defn parse-cmudict-line [line]
   (string/split (string/lower-case line) #"(\(\d+\))? +"))
 
