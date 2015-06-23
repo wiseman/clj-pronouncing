@@ -50,16 +50,28 @@
   (memoize
    (fn []
      (with-open [rdr (io/reader (io/resource "com/lemonodor/pronouncing/cmudict-0.7b"))]
-       (reduce
-        (fn [db [word phones]]
-          (assoc db word
-                 (concat (get db word []) (vector phones))))
-        {}
-        (parse-cmudict rdr))))))
+       (doall (parse-cmudict rdr))))))
+
+
+(def word-phones-map
+  (memoize
+   (fn []
+     (reduce
+      (fn [db [word phones]]
+        (assoc db word (concat (get db word []) (vector phones))))
+      {}
+      (default-pronouncing-db)))))
 
 
 (defn phones-for-word [word]
-  ((default-pronouncing-db) (string/lower-case word)))
+  ((word-phones-map) (string/lower-case word)))
+
+
+(defn search [regex]
+  (let [r (re-pattern (str "\\b" regex "\\b"))]
+    (for [[word phones] (default-pronouncing-db)
+          :when (re-find r phones)]
+      word)))
 
 
 (defn count-syllables

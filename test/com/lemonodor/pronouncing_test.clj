@@ -25,8 +25,8 @@
               ["louis'" "L UW1 IY0 Z"]
               ["louis'" "L UW1 IH0 S IH0 Z"]]
              db))))
-  (testing "default-pronouncing-db"
-    (let [db (pronouncing/default-pronouncing-db)]
+  (testing "word-phones-map"
+    (let [db (pronouncing/word-phones-map)]
       (is (= ["JH AA1 N"]
              (db "john")))
       (is (= ["L UW1 IH0 S"
@@ -39,3 +39,15 @@
     (is (= ["P ER0 M IH1 T"
             "P ER1 M IH2 T"]
            (pronouncing/phones-for-word "permit")))))
+
+
+(deftest search
+  (testing "search"
+    (is (= ["all-purpose" "interpolate" "interpolated" "multipurpose"
+            "perpetrate" "perpetrated" "perpetrates" "perpetrating"
+            "perpetrator" "perpetrator's" "perpetrators" "proserpina"
+            "purpa" "purple" "purples" "purpose" "purposeful" "purposefully"
+            "purposeless" "purposely" "purposes" "purposes" "serpas" "serpent"
+            "serpent's" "serpentine" "serpents" "terpening" "tirpak" "turpen"
+            "turpentine"]
+           (pronouncing/search "ER1 P AH0")))))
