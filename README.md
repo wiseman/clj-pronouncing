@@ -11,6 +11,10 @@ This is a port of
 and
 [documentation](https://pronouncing.readthedocs.org/en/latest/tutorial.html).
 
+Note that this supersedes my
+[clj-syllables library](https://github.com/wiseman/clj-syllables), and
+I should update [songku](https://songku.herokuapp.com/) to use it!
+
 ## Installation
 
 ```
