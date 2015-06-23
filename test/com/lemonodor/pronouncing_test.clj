@@ -61,20 +61,13 @@
 
 (deftest search-stresses
   (testing "search-stresses"
-    (is (= ["G UW0 B ER0 N AH0 T AO1 R IY0 AH0 L"]
+    (is (= ["G UW0 B ER2 N AH0 T AO1 R IY2 AH0 L"]
            (pronouncing/phones-for-word "gubernatorial")))
 
-    (is (= "000100"
-           (pronouncing/stresses "G UW0 B ER0 N AH0 T AO1 R IY0 AH0 L")))
-    (is (= ["anesthesiology" "dibartolomeo" "epidemiological"
-            "epidemiologically" "epidemiologist" "epidemiologists"
-            "experimentally" "experimentally" "gubernatorial" "heterogeneity"
-            "heterogeneity" "heterosexuality" "investigational" "irregularities"
-            "irritability" "microelettronica" "oversensitivity"
-            "overwhelmability" "permeability" "phytogeography" "radioactivity"
-            "radioactivity" "underdevelopment" "uninterruptible"
-            "uninterruptible" "variability"]
-           (pronouncing/search-stresses "000100")))))
+    (is (= "020120"
+           (pronouncing/stresses "G UW0 B ER2 N AH0 T AO1 R IY2 AH0 L")))
+    (is (= ["gubernatorial"]
+           (pronouncing/search-stresses "020120")))))
 
 
 (deftest syllable-count
