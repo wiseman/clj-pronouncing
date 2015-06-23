@@ -1,7 +1,5 @@
 (ns com.lemonodor.pronouncing
-  (:require [clojure.edn :as edn]
-            [clojure.java.io :as io]
-            [clojure.set :as set]
+  (:require [clojure.java.io :as io]
             [clojure.string :as string])
   (:gen-class))
 
@@ -33,19 +31,6 @@
     phonemes)))
 
 
-(defn make-syllable-db-from-cmudict [path]
-  (with-open [rdr (io/reader path)]
-    (apply
-     merge-with
-     set/union
-     (map (fn [[word & phonemes]]
-            {word #{(count-cmudict-syllables phonemes)}})
-          (map parse-cmudict-line
-               (filter
-                (fn [^String l] (not (= (.charAt l 0) \;)))
-                (line-seq rdr)))))))
-
-
 (def default-pronouncing-db
   (memoize
    (fn []
@@ -74,15 +59,23 @@
       word)))
 
 
+(defn stresses [phones]
+  (string/replace phones #"[^012]" ""))
+
+
+(defn search-stresses [regex]
+  (let [r (re-pattern regex)]
+    (for [[word phones] (default-pronouncing-db)
+          :when (re-find r (stresses phones))]
+      word)))
+
+
+(defn syllable-count [phones]
+  (count (filter #(#{\0 \1 \2} %) phones)))
+
+
 (defn count-syllables
   ([word]
    (count-syllables (default-pronouncing-db) word))
   ([sdb word]
    (sdb (string/lower-case word))))
-
-
-(defn -main [& args]
-  (let [sdb (make-syllable-db-from-cmudict (first args))]
-    (binding [*out* *err*]
-      (println "Creating syllable database with" (count sdb) "words."))
-    (prn sdb)))

@@ -51,3 +51,33 @@
             "serpent's" "serpentine" "serpents" "terpening" "tirpak" "turpen"
             "turpentine"]
            (pronouncing/search "ER1 P AH0")))))
+
+
+(deftest stresses
+  (testing "stresses"
+    (is (= "12"
+           (pronouncing/stresses "P ER1 M IH2 T")))))
+
+
+(deftest search-stresses
+  (testing "search-stresses"
+    (is (= ["G UW0 B ER0 N AH0 T AO1 R IY0 AH0 L"]
+           (pronouncing/phones-for-word "gubernatorial")))
+
+    (is (= "000100"
+           (pronouncing/stresses "G UW0 B ER0 N AH0 T AO1 R IY0 AH0 L")))
+    (is (= ["anesthesiology" "dibartolomeo" "epidemiological"
+            "epidemiologically" "epidemiologist" "epidemiologists"
+            "experimentally" "experimentally" "gubernatorial" "heterogeneity"
+            "heterogeneity" "heterosexuality" "investigational" "irregularities"
+            "irritability" "microelettronica" "oversensitivity"
+            "overwhelmability" "permeability" "phytogeography" "radioactivity"
+            "radioactivity" "underdevelopment" "uninterruptible"
+            "uninterruptible" "variability"]
+           (pronouncing/search-stresses "000100")))))
+
+
+(deftest syllable-count
+  (testing "syllable-count"
+    (is (= 4
+           (pronouncing/syllable-count "L IH1 T ER0 AH0 L IY0")))))
