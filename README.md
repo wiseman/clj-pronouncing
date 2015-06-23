@@ -7,7 +7,9 @@ provides ways to look up word pronounciations, count syllables, and
 find rhyming words.
 
 This is a port of
-[Allison Parrish's Python code](https://github.com/aparrish/pronouncingpy).
+[Allison Parrish's Python code](https://github.com/aparrish/pronouncingpy)
+and
+[documentation](https://pronouncing.readthedocs.org/en/latest/tutorial.html).
 
 
 ## Word pronounciations
