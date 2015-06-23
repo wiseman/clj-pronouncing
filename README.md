@@ -6,6 +6,10 @@ This is a simple interface to the CMU Pronouncing Dictionary. It
 provides ways to look up word pronounciations, count syllables, and
 find rhyming words.
 
+This is a port of
+[Allison Parrish's Python code](https://github.com/aparrish/pronouncingpy).
+
+
 ## Word pronounciations
 
 Let’s start by using Pronouncing to get the pronunciation for a given
@@ -53,6 +57,7 @@ user> (->> (string/split "april is the cruelest month breeding lilacs out of the
 (["AH0" 4] ["L" 4] ["D" 3] ["R" 3] ["DH" 2])
 ```
 
+
 ## Pronounciation search
 
 Pronouncing has a helpful function `search` which allows you to search
@@ -94,10 +99,11 @@ user> (->> (string/split "april is the cruelest month breeding lilacs out of the
            (map #(take 2 (string/split % #" ")))
            (map #(string/join " " %))
            (map #(pro/search (str "^" %)))
-           (map #(rand-nth %))
+           (map rand-nth)
            (string/join " "))
 "apec israel's the critchfield munsch brainer lionize outtakes ovens themselves debs"
 ```
+
 
 ## Counting syllables
 
@@ -127,4 +133,116 @@ user> (->> (string/split "april is the cruelest month breeding lilacs out of the
            (map pro/syllable-count)
            (reduce +))
 15
+```
+
+
+## Meter
+
+Pronouncing includes a number of functions to help you isolate
+metrical characteristics of a text. You can use the `stresses`
+function to get a string that represents the “stress pattern” of a
+string of phones:
+
+```
+user> (require '[com.lemonodor.pronouncing :as pro])
+user> (pro/stresses (first (pro/phones-for-word "snappiest")))
+"102"
+```
+
+A “stress pattern” is a string that contains only the stress values
+from a sequence of phones. (The numbers indicate the level of stress:
+1 for primary stress, 2 for secondary stress, and 0 for unstressed.)
+
+You can use the `search_stresses` function to find words based on
+their stress patterns. For example, to find words that have two
+dactyls in them (“dactyl” is a metrical foot consisting of one
+stressed syllable followed by two unstressed syllables):
+
+```
+user> (require '[com.lemonodor.pronouncing :as pro])
+user> (pro/search-stresses "100100")
+("afroamerican" "afroamericans" "interrelationship" "overcapacity")
+```
+
+You can use regular expression syntax inside of the patterns you give
+to `search-stresses`. For example, to find all words wholly consisting
+of two anapests (unstressed, unstressed, stressed), with “stressed”
+meaning either primary stress or secondary stress:
+
+```
+user> (require '[com.lemonodor.pronouncing :as pro])
+user> (pro/search-stresses "^00[12]00[12]$")
+("neopositivist" "undercapitalize" "undercapitalized")
+```
+
+The following example rewrites a text, replacing each word with a
+random word that has the same stress pattern:
+
+```
+user> (require '[com.lemonodor.pronouncing :as pro]
+               '[clojure.string :as string])
+user> (->> (string/split "april is the cruelest month breeding lilacs out of the dead" #" ")
+           (map #(first (pro/phones-for-word %)))
+           (map pro/stresses)
+           (map #(pro/search-stresses (str "^" % "$")))
+           (map rand-nth))
+("delta" "bronx" "'em" "inzer" "denz" "sobils" "bedpan" "paiz" "bush" "can" "giang")
+```
+
+
+## Rhyme
+
+Pronouncing includes a simple function, `rhymes`, which returns a list
+of words that (potentially) rhyme with a given word. You can use it
+like so:
+
+```
+user> (require '[com.lemonodor.pronouncing :as pro])
+user> (pro/rhymes "failings")
+("mailings" "railings" "tailings")
+```
+
+The `rhymes` function returns a list of all possible rhymes for the
+given word—i.e., words that rhyme with any of the given word’s
+pronunciations. If you only want rhymes for one particular
+pronunciation, the the `rhyming-part` function gives a smaller part of
+a string of phones that can be used with `search` to find rhyming
+words. The following code demonstrates how to find rhyming words for
+two different pronunciations of “uses”:
+
+```
+user> (require '[com.lemonodor.pronouncing :as pro])
+user> (def pronounciations (pro/phones-for-word "uses"))
+#'user/pronounciations
+user> (def sss (pro/rhyming-part (first pronounciations)))
+#'user/sss
+user> (def zzz (pro/rhyming-part (second pronounciations)))
+#'user/zzz
+user> (take 5 (pro/search (str sss "$")))
+("bruce's" "juices" "medusas" "produces" "tuscaloosa's")
+user> (take 5 (pro/search (str zzz "$")))
+("abuses" "cabooses" "disabuses" "excuses" "induces")
+```
+
+Here's how to check whether one word rhymes with another:
+
+```
+user> (require '[com.lemonodor.pronouncing :as pro])
+user> ((set (pro/rhymes "cheese")) "wheeze")
+"wheeze"
+user> ((set (pro/rhymes "cheese")) "geese")
+nil
+```
+
+The following example rewrites a text, replacing each word with a
+rhyming word (when a rhyming word is available):
+
+```
+user> (require '[com.lemonodor.pronouncing :as pro]
+               '[clojure.string :as string])
+user> (->> (string/split "april is the cruelest month breeding lilacs out of the dead" #" ")
+           (map #(vector % (pro/rhymes %)))
+           (map #(let [[w rs] %] (if (seq rs) (rand-nth rs) w)))
+           (string/join " "))
+"april focuses shema coolest month heeding paperbacks snout aversive huh dredd"
 ```
