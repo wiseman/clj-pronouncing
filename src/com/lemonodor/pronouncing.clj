@@ -95,3 +95,14 @@
        (take-while-inclusive #(not (re-matches #".+[12]$" %)))
        reverse
        (string/join " ")))
+
+
+(defn rhymes [word]
+  (->> word
+       phones-for-word
+       (mapcat
+        #(-> %
+             rhyming-part
+             (str "$")
+             search))
+       (filter #(not (= % word)))))

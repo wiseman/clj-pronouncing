@@ -82,3 +82,9 @@
            (pronouncing/rhyming-part
             ;; "purple"
             "P ER1 P AH0 L")))))
+
+
+(deftest rhymes
+  (testing "rhymes"
+    (is (= ["commissioner" "parishioner" "petitioner" "practitioner"]
+           (pronouncing/rhymes "conditioner")))))
