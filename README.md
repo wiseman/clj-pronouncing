@@ -11,6 +11,12 @@ This is a port of
 and
 [documentation](https://pronouncing.readthedocs.org/en/latest/tutorial.html).
 
+## Installation
+
+```
+[com.lemonodor/pronouncing "0.0.3"]
+```
+
 
 ## Word pronounciations
 
