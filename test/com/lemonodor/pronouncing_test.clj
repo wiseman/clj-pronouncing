@@ -84,7 +84,7 @@
 
 (deftest syllable-count-for-word
   (testing "syllable-count-for-word"
-    (is (= [4 3]
+    (is (= #{4 3}
            (pronouncing/syllable-count-for-word "literally")))))
 
 
