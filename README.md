@@ -1,4 +1,4 @@
-# Pronouncing
+# clj-pronouncing
 
 [![Build Status](https://travis-ci.org/wiseman/clj-pronouncing.svg?branch=master)](https://travis-ci.org/wiseman/clj-pronouncing) [![Coverage Status](https://coveralls.io/repos/wiseman/clj-pronouncing/badge.svg?branch=master)](https://coveralls.io/r/wiseman/clj-pronouncing?branch=master)
 
@@ -24,7 +24,7 @@ I should update [songku](https://songku.herokuapp.com/) to use it!
 
 ## Word pronounciations
 
-Let’s start by using Pronouncing to get the pronunciation for a given
+Let’s start by using clj-pronouncing to get the pronunciation for a given
 word. Here’s the code:
 
 ```
@@ -49,7 +49,7 @@ Sometimes, the pronouncing dictionary has more than one pronunciation
 for the same word. “Permit” is a good example: it can be pronounced
 either with the stress on the first syllable (“do you have a permit to
 program here?”) or on the second syllable (“will you permit me to
-program here?”). For this reason, the `phones_for_word` function
+program here?”). For this reason, the `phones-for-word` function
 returns a list of possible pronunciations. (You’ll need to come up
 with your own criteria for deciding which pronunciation is best for
 your purposes.)
@@ -72,7 +72,7 @@ user> (->> (string/split "april is the cruelest month breeding lilacs out of the
 
 ## Pronounciation search
 
-Pronouncing has a helpful function `search` which allows you to search
+clj-pronouncing has a helpful function `search` which allows you to search
 the pronouncing dictionary for words whose pronunciation matches a
 particular regular expression. For example, to find words that have
 within them the same sounds as the word “sighs”:
@@ -150,7 +150,7 @@ user> (->> (string/split "april is the cruelest month breeding lilacs out of the
 
 ## Meter
 
-Pronouncing includes a number of functions to help you isolate
+clj-pronouncing includes a number of functions to help you isolate
 metrical characteristics of a text. You can use the `stresses`
 function to get a string that represents the “stress pattern” of a
 string of phones:
@@ -165,7 +165,7 @@ A “stress pattern” is a string that contains only the stress values
 from a sequence of phones. (The numbers indicate the level of stress:
 1 for primary stress, 2 for secondary stress, and 0 for unstressed.)
 
-You can use the `search_stresses` function to find words based on
+You can use the `search-stresses` function to find words based on
 their stress patterns. For example, to find words that have two
 dactyls in them (“dactyl” is a metrical foot consisting of one
 stressed syllable followed by two unstressed syllables):
@@ -204,7 +204,7 @@ user> (->> (string/split "april is the cruelest month breeding lilacs out of the
 
 ## Rhyme
 
-Pronouncing includes a simple function, `rhymes`, which returns a list
+clj-pronouncing includes a simple function, `rhymes`, which returns a list
 of words that (potentially) rhyme with a given word. You can use it
 like so:
 
