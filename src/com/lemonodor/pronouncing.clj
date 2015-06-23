@@ -70,15 +70,16 @@
       word)))
 
 
+(defn stresses-for-word [word]
+  (map stresses (phones-for-word word)))
+
+
 (defn syllable-count [phones]
   (count (filter #(#{\0 \1 \2} %) phones)))
 
 
-(defn count-syllables
-  ([word]
-   (count-syllables (default-pronouncing-db) word))
-  ([sdb word]
-   (sdb (string/lower-case word))))
+(defn syllable-count-for-word [word]
+  (map syllable-count (phones-for-word word)))
 
 
 (defn take-while-inclusive [pred coll]

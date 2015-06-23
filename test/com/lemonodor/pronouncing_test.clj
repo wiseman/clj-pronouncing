@@ -70,10 +70,22 @@
            (pronouncing/search-stresses "020120")))))
 
 
+(deftest stresses-for-word
+  (testing "stresses-for-word"
+    (is (= ["01" "12"]
+           (pronouncing/stresses-for-word "permit")))))
+
+
 (deftest syllable-count
   (testing "syllable-count"
     (is (= 4
            (pronouncing/syllable-count "L IH1 T ER0 AH0 L IY0")))))
+
+
+(deftest syllable-count-for-word
+  (testing "syllable-count-for-word"
+    (is (= [4 3]
+           (pronouncing/syllable-count-for-word "literally")))))
 
 
 (deftest rhyming-part
