@@ -79,3 +79,19 @@
    (count-syllables (default-pronouncing-db) word))
   ([sdb word]
    (sdb (string/lower-case word))))
+
+
+(defn take-while-inclusive [pred coll]
+  (lazy-seq
+   (when-let [s (seq coll)]
+     (if (pred (first s))
+       (cons (first s) (take-while-inclusive pred (rest s)))
+       (list (first s))))))
+
+
+(defn rhyming-part [phones-str]
+  (->> (string/split phones-str #" ")
+       reverse
+       (take-while-inclusive #(not (re-matches #".+[12]$" %)))
+       reverse
+       (string/join " ")))

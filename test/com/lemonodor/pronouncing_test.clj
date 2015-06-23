@@ -74,3 +74,11 @@
   (testing "syllable-count"
     (is (= 4
            (pronouncing/syllable-count "L IH1 T ER0 AH0 L IY0")))))
+
+
+(deftest rhyming-part
+  (testing "rhyming-part"
+    (is (= "ER1 P AH0 L"
+           (pronouncing/rhyming-part
+            ;; "purple"
+            "P ER1 P AH0 L")))))
