@@ -1,4 +1,4 @@
-(defproject com.lemonodor/pronouncing "0.0.1-SNAPSHOT"
+(defproject com.lemonodor/pronouncing "0.0.1"
   :description "Clojure interface to the CMU pronouncing dictionary."
   :url "https://github.com/wiseman/clj-pronouncing"
   :license {:name "MIT License"
