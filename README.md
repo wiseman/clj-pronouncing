@@ -18,7 +18,7 @@ I should update [songku](https://songku.herokuapp.com/) to use it!
 ## Installation
 
 ```
-[com.lemonodor/pronouncing "0.0.3"]
+[com.lemonodor/pronouncing "0.0.5"]
 ```
 
 
