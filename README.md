@@ -258,3 +258,9 @@ user> (->> (string/split "april is the cruelest month breeding lilacs out of the
            (string/join " "))
 "april focuses shema coolest month heeding paperbacks snout aversive huh dredd"
 ```
+
+## License
+
+Copyright 2015 John Wiseman jjwiseman@gmail.com
+
+Distributed under the [MIT License](http://opensource.org/licenses/MIT).
