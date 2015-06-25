@@ -125,11 +125,11 @@ phones to the `syllable-count` function, like so:
 
 ```
 user> (require '[com.lemonodor.pronouncing :as pro])
-user> (-> "programming"
-          pro/phones-for-word
-          first
-          pro/syllable-count)
-3
+user> (->> "literally"
+           pro/phones-for-word
+           (map pro/syllable-count))
+(4 3)
+;; Some people say it with 4 syllables, some with 3.
 ```
 
 The following example calculates the total number of syllables in a
@@ -147,6 +147,26 @@ user> (->> (string/split "april is the cruelest month breeding lilacs out of the
 15
 ```
 
+If you want to be complete, you can calculate the number of syllables
+in every possible way to pronounce the text, in case somw words have
+multiple pronounciations. For example, there are 4 ways to say
+"literally literally": 1 with 8 syllables, 2 with 7 syllables, and 1
+with 6 syllables (You will need to add
+`[org.clojure/math.combinatorics "0.0.8"]` as a depdendency to your
+project to use the combinatorics package.):
+
+```
+user> (require '[com.lemonodor.pronouncing :as pro]
+               '[clojure.string :as string]
+               '[clojure.math.combinatorics :as combo])
+user> (->> (string/split "literally literally" #" ")
+           (map pro/phones-for-word)
+           (map #(map pro/syllable-count %))
+           (map set)
+           (apply combo/cartesian-product)
+           (map #(reduce + %)))
+(8 7 7 6)
+```
 
 ## Meter
 
