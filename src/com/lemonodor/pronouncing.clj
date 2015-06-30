@@ -11,14 +11,14 @@
     [(string/lower-case word) phones]))
 
 
-(defn is-cmudict-comment-line? [line]
-  (= (get line 0) \;))
+(defn is-cmudict-comment-line? [^String line]
+  (.startsWith line ";"))
 
 
 (defn parse-cmudict [rdr]
   (->> rdr
        line-seq
-       (filter #(not (is-cmudict-comment-line? %)))
+       (remove is-cmudict-comment-line?)
        (map parse-cmudict-line)))
 
 
@@ -34,7 +34,7 @@
    (fn []
      (reduce
       (fn [db [word phones]]
-        (assoc db word (concat (get db word []) (vector phones))))
+        (assoc db word (conj (get db word []) phones)))
       {}
       (default-pronouncing-db)))))
 
@@ -42,7 +42,7 @@
 (defn syllable-count
   "Counts the number of syllables in a string of phones."
   [phones]
-  (count (filter #(#{\0 \1 \2} %) phones)))
+  (count (re-seq #"\S+[0-2]\b" phones)))
 
 
 (defn phones-for-word
@@ -77,15 +77,17 @@
   (map stresses (phones-for-word word)))
 
 
-(defn take-while-inclusive
-  "Like take-while, but also includes the first item for which pred
-  returns false."
+(defn- take-from-last
+  "Return seq of elements in collection from the last item to pass 
+  predicate until the end."
   [pred coll]
-  (lazy-seq
-   (when-let [s (seq coll)]
-     (if (pred (first s))
-       (cons (first s) (take-while-inclusive pred (rest s)))
-       (list (first s))))))
+  (loop [match nil
+         xs coll]
+    (if-not (seq xs)
+      match
+      (if (pred (first xs))
+        (recur xs (rest xs))
+        (recur match (rest xs))))))
 
 
 (defn rhyming-part
@@ -95,9 +97,7 @@
   syllable nearest the end of the word up to the end of the word."
   [phones-str]
   (->> (string/split phones-str #" ")
-       reverse
-       (take-while-inclusive #(not (re-matches #".+[12]$" %)))
-       reverse
+       (take-from-last #(re-matches #".+[12]$" %))
        (string/join " ")))
 
 
@@ -138,4 +138,4 @@
              rhyming-part
              (str "$")
              search))
-       (filter #(not (= % word)))))
+       (remove #{word})))
