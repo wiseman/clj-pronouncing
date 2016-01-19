@@ -4,5 +4,5 @@
   :license {:name "MIT License"
             :url "http://opensource.org/licenses/MIT"}
   :deploy-repositories [["releases" :clojars]]
-  :dependencies [[org.clojure/clojure "1.6.0"]]
+  :dependencies [[org.clojure/clojure "1.8.0"]]
   :profiles {:dev {:plugins [[lein-cloverage "1.0.2"]]}})

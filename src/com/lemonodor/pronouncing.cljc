@@ -11,8 +11,8 @@
     [(string/lower-case word) phones]))
 
 
-(defn is-cmudict-comment-line? [^String line]
-  (.startsWith line ";"))
+(defn is-cmudict-comment-line? [line]
+  (string/starts-with? line ";"))
 
 
 (defn parse-cmudict [rdr]
